@@ -42,7 +42,7 @@
 #       with:
 #         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-name: 'Terraform Task Board'
+name: 'Terraform'
 
 on:
   push:
@@ -52,9 +52,16 @@ on:
 permissions:
   contents: read
 
+env:
+  AZURE_CLIENT_ID: ${{secrets.AZURE_CLIENT_ID}}
+  AZURE_CLIENT_SECRET: ${{secrets.AZURE_CLIENT_SECRET}}
+  AZURE_CREDENTIALS: ${{secrets.AZURE_CREDENTIALS}}
+  AZURE_SUBSCRIPTION_ID: ${{secrets.AZURE_SUBSCRIPTION_ID}}
+  AZURE_TENANT_ID: ${{secrets.AZURE_TENANT_ID}}
+
 jobs:
   terraform:
-    name: 'Terraform Test'
+    name: 'Terraform'
     runs-on: ubuntu-latest
     environment: production
 
@@ -77,13 +84,15 @@ jobs:
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: terraform init
+      
+    #Login to Azure via Azure CLI
+    - name: Login via Azure CLI
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
 
     # Checks that all Terraform configuration files adhere to a canonical format
-    - name: Terraform Format
-      run: terraform fmt -check -recursive
-
-    # Validate terraform files
-    - name: Terraform Validate
-      run: terraform validate
+    - name: Terraform Applay
+      run: terraform applay -auto-approve
 
     
