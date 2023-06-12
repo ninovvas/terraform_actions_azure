@@ -81,15 +81,18 @@ jobs:
       with:
         terraform_version: 1.4.6
         
-     #Login to Azure via Azure CLI
-    - name: Login via Azure CLI
-      uses: azure/login@v1
-      with:
-        creds: ${{secrets.AZURE_CREDENTIALS}}
+    - name: Terraform Validate
+      run: terraform validate
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: terraform init
+    
+      #Login to Azure via Azure CLI
+    - name: Login via Azure CLI
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Apply
