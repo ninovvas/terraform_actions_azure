@@ -80,9 +80,6 @@ jobs:
       uses: hashicorp/setup-terraform@v2
       with:
         terraform_version: 1.4.6
-        
-    - name: Terraform Validate
-      run: terraform validate
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
